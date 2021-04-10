@@ -1151,7 +1151,6 @@ namespace NoteMarketPlace.Controllers
                             profile.ZipCode = upd.ZipCode;
                             profile.College = upd.College;
                             profile.City = upd.City;
-                            profile.SecondaryEmailAddress = upd.SecondaryEmailAddress;
                             profile.PhoneNumber = upd.PhoneNo;
 
                             DBobj.SaveChanges();
@@ -1196,7 +1195,6 @@ namespace NoteMarketPlace.Controllers
                             profile.ZipCode = upd.ZipCode;
                             profile.College = upd.College;
                             profile.City = upd.City;
-                            profile.SecondaryEmailAddress = upd.SecondaryEmailAddress;
                             profile.PhoneNumber = upd.PhoneNo;
                             DBobj.UsersProfile.Add(profile);
                             DBobj.SaveChanges();
