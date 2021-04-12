@@ -142,7 +142,15 @@
                                         <div class="logged-in-user-photo">
                                             <div class="dropdown">
                                                 <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    if(@Session["dpPath"] !=null)
+                                                    {
                                                     <img src="@Session["dpPath"]" alt="User Photo" class="rounded-circle">
+                                                    }
+                                                    else
+                                                    {
+                                                    <img src= "~/Content/User/images/testimonial/customer-4.png" />
+                                                   }
+
                                                 </a>
 
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">

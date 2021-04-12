@@ -339,7 +339,7 @@ namespace NoteMarketPlace.Controllers
        [Authorize]
         public ActionResult Logout()
         {
-            Session.Abandon();
+          
 
             FormsAuthentication.SignOut();
             
@@ -614,6 +614,7 @@ namespace NoteMarketPlace.Controllers
                 return View();
             }
         }
+        [Authorize]
          // GET: Members
         public ActionResult members(int? page, string membersearch)
         {
@@ -653,6 +654,7 @@ namespace NoteMarketPlace.Controllers
         {
             using (NotesMarketPlaceEntities DBobj = new NotesMarketPlaceEntities())
             {
+               
                 var countrycode = DBobj.Country.ToList();
                 ViewBag.countrycode = new SelectList(countrycode, "CountryID", "CountryCode");
                 return View();
@@ -673,54 +675,96 @@ namespace NoteMarketPlace.Controllers
 
                         var countrycode = DBobj.Country.ToList();
                         ViewBag.countrycode = new SelectList(countrycode, "CountryID", "CountryCode");
-                        UsersProfile pr = new UsersProfile();
-                        pr.UserID = id;
-                        pr.FirstName = profile.FirstName;
-                        pr.LastName = profile.LastName;
-                        pr.EmailID = profile.EmailId;
-                        pr.Gender = 2;
-                        pr.PhoneCountryCode = profile.CountryCode;
-                        pr.PhoneNumber = profile.PhoneNo;
-                        pr.Country = 2;
-                        pr.SecondaryEmailAddress = profile.SecondaryEmailAddress;
-                        pr.CreatedDate = DateTime.Now;
-                        pr.CreatedBy = id;
-                        pr.ModifiedBy = id;
-                        pr.ModifiedDate = DateTime.Now;
-                        pr.IsActive = true;
-                        DBobj.UsersProfile.Add(pr);
-                        DBobj.SaveChanges();
-
-                        string path = Path.Combine(Server.MapPath("~/Member/" + Session["UserID"].ToString()), pr.ProfileID.ToString());
-                        if (!Directory.Exists(path))
+                        int p = DBobj.UsersProfile.Where(x => x.UserID == id).Count();
+                        if (p > 0)
                         {
-                            Directory.CreateDirectory(path);
-                        }
-                        if (profile.ProfilePic != null && profile.ProfilePic.ContentLength > 0)
-                        {
-                            string fileName = Path.GetFileNameWithoutExtension(profile.ProfilePic.FileName);
-                            string extension = Path.GetExtension(profile.ProfilePic.FileName);
-                            fileName = "DP_" + DateTime.Now.ToString("ddMMyyyy") + extension;
-                            string finalpath = Path.Combine(path, fileName);
-                            profile.ProfilePic.SaveAs(finalpath);
-
-                            pr.ProfilePic = Path.Combine(("~/Member/" + Session["UserID"].ToString() + "/" + pr.ProfileID.ToString() + "/"), fileName);
+                            UsersProfile pr = DBobj.UsersProfile.Where(x => x.UserID == id).FirstOrDefault();
+                            pr.UserID = id;
+                            pr.FirstName = profile.FirstName;
+                            pr.LastName = profile.LastName;
+                            pr.EmailID = profile.EmailId;
+                            pr.Gender = 2;
+                            pr.PhoneCountryCode = profile.CountryCode;
+                            pr.PhoneNumber = profile.PhoneNo;
+                            pr.Country = 2;
+                            pr.SecondaryEmailAddress = profile.SecondaryEmailAddress;
+                            pr.CreatedDate = DateTime.Now;
+                            pr.CreatedBy = id;
+                            pr.ModifiedBy = id;
+                            pr.ModifiedDate = DateTime.Now;
+                            pr.IsActive = true;
+                            DBobj.UsersProfile.Add(pr);
                             DBobj.SaveChanges();
+
+                            string path = Path.Combine(Server.MapPath("~/Member/" + Session["UserID"].ToString()));
+
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
+                            }
+
+                            if (profile.ProfilePic != null && profile.ProfilePic.ContentLength > 0)
+                            {
+                                string fileName = Path.GetFileNameWithoutExtension(profile.ProfilePic.FileName);
+                                string extension = Path.GetExtension(profile.ProfilePic.FileName);
+                                fileName = "DP_" + DateTime.Now.ToString("ddMMyyyy") + extension;
+                                string finalpath = Path.Combine(path, fileName);
+                                profile.ProfilePic.SaveAs(finalpath);
+
+                                pr.ProfilePic = Path.Combine(("/Member/" + Session["UserID"].ToString()) + "/", fileName);
+                                DBobj.SaveChanges();
+                            }
+
+                        }
+
+
+                        else
+                        {
+
+                            UsersProfile pr = new UsersProfile();
+                            pr.UserID = id;
+                            pr.FirstName = profile.FirstName;
+                            pr.LastName = profile.LastName;
+                            pr.EmailID = profile.EmailId;
+                            pr.Gender = 2;
+                            pr.PhoneCountryCode = profile.CountryCode;
+                            pr.PhoneNumber = profile.PhoneNo;
+                            pr.Country = 2;
+                            pr.SecondaryEmailAddress = profile.SecondaryEmailAddress;
+                            pr.CreatedDate = DateTime.Now;
+                            pr.CreatedBy = id;
+                            pr.ModifiedBy = id;
+                            pr.ModifiedDate = DateTime.Now;
+                            pr.IsActive = true;
+                            DBobj.UsersProfile.Add(pr);
+                            DBobj.SaveChanges();
+                            string path = Path.Combine(Server.MapPath("~/Member/" + Session["UserID"].ToString()));
+
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
+                            }
+
+                            if (profile.ProfilePic != null && profile.ProfilePic.ContentLength > 0)
+                            {
+                                string fileName = Path.GetFileNameWithoutExtension(profile.ProfilePic.FileName);
+                                string extension = Path.GetExtension(profile.ProfilePic.FileName);
+                                fileName = "DP_" + DateTime.Now.ToString("ddMMyyyy") + extension;
+                                string finalpath = Path.Combine(path, fileName);
+                                profile.ProfilePic.SaveAs(finalpath);
+
+                                pr.ProfilePic = Path.Combine(("/Member/" + Session["UserID"].ToString() + "/"), fileName);
+                                DBobj.SaveChanges();
+                                return RedirectToAction("dashboard", "Admin");
+                            }
                         }
                     }
-                    ViewBag.Message = "<p><span><i class='fas fa-check-circle'></i></span> Your Profile has succesfully been updated</p>";
-                }
-                else
-                {
 
-                    ViewBag.Message = "<p> Your Profile has not been updated.</p>";
-                }
-
-                ModelState.Clear();
-                return RedirectToAction("dashboard", "Admin");
-
-            
+                        ModelState.Clear();
+                        return RedirectToAction("dashboard", "Admin");
+                 }   
                 
+
             }
             catch (DbEntityValidationException e)
             {
@@ -774,7 +818,7 @@ namespace NoteMarketPlace.Controllers
               
         }
    
-        
+        [Authorize]
         public ActionResult notesUnderReview(int? page,string uSearch, string sellerID)
         {
             using (NotesMarketPlaceEntities DBobj = new NotesMarketPlaceEntities())
@@ -867,6 +911,8 @@ namespace NoteMarketPlace.Controllers
                 return RedirectToAction("notesUnderReview","Admin");
             }
         }
+
+        [Authorize]
         public ActionResult publishedNotes(int? page,string pSearch,string sellerID, string submit)
         {
             using (NotesMarketPlaceEntities DBobj = new NotesMarketPlaceEntities())

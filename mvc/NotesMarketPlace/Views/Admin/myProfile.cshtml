@@ -33,12 +33,7 @@
     <!-- Responsive css -->
     <link rel="stylesheet" href="~/Content/Admin/css/responsive.css">
 
-    <Script type="text/javascript">
-        window.history.forward();
-        function noBack() {
-            window.history.forward();
-        }
-    </Script>
+    
 
 </head>
 
@@ -208,7 +203,7 @@
 
                 <div class="container">
                     <div class="row">
-                        <form method="post">
+                        <form method="post" enctype="multipart/form-data">
                             <div class="row">
 
                                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
@@ -259,8 +254,13 @@
                                             <div class="form-group">
                                                 <label class="info-label" for="mpa-ccode">Code</label>
                                                 @Html.DropDownListFor(x => x.CountryCode, new SelectList(ViewBag.countrycode, "Value", "Text"), "Select Your Country Code", new { @class = "form-control input-box-style", id = "mpa-ccode" })
-                                               
+
                                                 <div class="select-down-arrow"><img class="select-down-arrow-img" src="~/Content/Admin/images/user-profile/down-arrow.png" alt="eye"></div>
+                                            </div>
+                                            <div class="incorrect-password-label">
+                                                <p>
+                                                    @Html.ValidationMessage("CountryCode", new { @style = "color:red" })
+                                                </p>
                                             </div>
                                         </div>
 

@@ -22,7 +22,9 @@ namespace NoteMarketPlace.Models
         [Required(ErrorMessage = "Please enter country code")]
         public string CountryCode { get; set; }
 
+        
         [Required(ErrorMessage = "Please enter phone number")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid Phone number")]
         public string PhoneNo { get; set; }
 
         public string SecondaryEmailAddress { get; set; }

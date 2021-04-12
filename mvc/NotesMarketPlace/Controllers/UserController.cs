@@ -185,10 +185,9 @@ namespace NoteMarketPlace.Controllers
         public ActionResult Logout()
         {
            
-          
-             FormsAuthentication.SignOut();
+          FormsAuthentication.SignOut();
         
-             return RedirectToAction("login");
+          return RedirectToAction("login");
          }
 
 
@@ -551,7 +550,7 @@ namespace NoteMarketPlace.Controllers
 
                var PublishedNoted = (from sell in PublishedNote
                                      join cate in Category on sell.NotesCategory equals cate.CategoryID into table1
-                                      from cate in table1.ToList()
+                                     from cate in table1.ToList()
                                       select new MyPublishNotes
                                       {
                                           SellerNotes = sell,
@@ -1094,7 +1093,7 @@ namespace NoteMarketPlace.Controllers
                 ViewBag.countrycode = new SelectList(countrycode, "CountryID", "CountryCode");
 
                 int id = (int)Session["UserID"];
-                if(DBobj.UsersProfile.Where(x => x.UserID == id).Count() > 0)
+                if (DBobj.UsersProfile.Where(x => x.UserID == id).Count() > 0)
                 {
                     UsersProfile userprofiles = DBobj.UsersProfile.Where(x => x.UserID == id).FirstOrDefault();
                     if (userprofiles.ProfilePic != null)
@@ -1104,7 +1103,7 @@ namespace NoteMarketPlace.Controllers
                 }
                 else
                 {
-                    Session["dpPath"] = "~/Content/User/images/testimonial/customer-4.png";
+                     Session["dpPath"] = "~/Content/User/images/testimonial/customer-4.png";
                 }
                 return View();
             }
